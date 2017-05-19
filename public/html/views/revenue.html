@@ -1,0 +1,58 @@
+
+<!-- Page Heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            <span class="fa fa-usd"></span> Revenue
+        </h1>
+    </div>
+</div>
+<!-- /.row -->
+
+<div class="row">
+
+    <div class="col-lg-12">
+        <h2>Chart</h2>
+        <canvas id="line" class="chart chart-line" chart-data="data"
+                chart-labels="labels" chart-series="series" chart-options="options"
+                chart-dataset-override="datasetOverride" chart-click="onClick">
+        </canvas>
+        <h2>Table</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>previous_month</th>
+                    <th>previous_year</th>
+                    <th>predicted_months</th>
+                    <th>mean</th>
+                    <th>low_80</th>
+                    <th>high_80</th>
+                    <th>low_95</th>
+                    <th>high_95</th>
+                    <th>method</th>
+                    <th>create_date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="entry in list">
+                    <td>{{entry.previous_month}}</td>
+                    <td>{{entry.previous_year}}</td>
+                    <td>{{entry.predicted_months}}</td>
+                    <td>{{entry.mean}}</td>
+                    <td>{{entry.low_80}}</td>
+                    <td>{{entry.high_80}}</td>
+                    <td>{{entry.low_95}}</td>
+                    <td>{{entry.high_95}}</td>
+                    <td>{{entry.method}}</td>
+                    <td>{{entry.create_date}}</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+
+
