@@ -39,9 +39,9 @@ angular.module('ControlR',['ui.router', 'chart.js'])
             'username': "ladyHildo"
         };
 
-        $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+        $scope.meanChartLabels = ["January", "February", "March", "April", "May", "June", "July"];
         $scope.series = ['Series A', 'Series B'];
-        $scope.data = [
+        $scope.meanChartData = [
             [65, 59, 80, 81, 56, 55, 40],
             [28, 48, 40, 19, 86, 27, 90]
         ];
@@ -70,10 +70,42 @@ angular.module('ControlR',['ui.router', 'chart.js'])
 
 
 
-        $http.get('api/all').then(function(response) {
-            $scope.list = response.data.data;
+        function fillChartData(value, list) {
 
-            console.log($scope.list);
+        }
+
+
+
+        $http.get('api/all').then(function(response) {
+
+            $scope.list = response.data.data;
+            $scope.meanChartData = [];
+
+            $scope.previousMonths =[];
+            $scope.meanChartLabels =[];
+
+            for(var i= 0; i < response.data.data.length; i++){
+
+
+                // fill selectbox with unique values
+                if(!$scope.previousMonths.includes(response.data.data[i].previous_month + " " + response.data.data[i].previous_year)){
+                    $scope.previousMonths.push(response.data.data[i].previous_month + " " + response.data.data[i].previous_year);
+                }
+
+                // select first value from list as selected
+                $scope.previousMonth = $scope.previousMonths[0];
+
+                // filter server response
+                if(response.data.data[i].previous_month + " " + response.data.data[i].previous_year === $scope.previousMonth){
+                    $scope.meanChartData.push(response.data.data[i].mean);
+                    $scope.meanChartLabels.push(response.data.data[i].predicted_months + " ")
+                }
+
+            }
+
+
+            console.log($scope.meanChartLabels)
+
         });
 
     }]);

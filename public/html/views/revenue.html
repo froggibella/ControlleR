@@ -13,8 +13,13 @@
 
     <div class="col-lg-12">
         <h2>Chart</h2>
-        <canvas id="line" class="chart chart-line" chart-data="data"
-                chart-labels="labels" chart-series="series" chart-options="options"
+        <label>Previous month</label>
+        <select ng-model="previousMonth" ng-options="x for x in previousMonths">
+
+        </select>
+
+        <canvas id="line" class="chart chart-line" chart-data="meanChartData"
+                chart-labels="meanChartLabels" chart-series="series" chart-options="options"
                 chart-dataset-override="datasetOverride" chart-click="onClick">
         </canvas>
         <h2>Table</h2>
