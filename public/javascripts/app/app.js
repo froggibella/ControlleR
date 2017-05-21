@@ -39,73 +39,71 @@ angular.module('ControlR',['ui.router', 'chart.js'])
             'username': "ladyHildo"
         };
 
-        $scope.meanChartLabels = ["January", "February", "March", "April", "May", "June", "July"];
-        $scope.series = ['Series A', 'Series B'];
+        $scope.series = ['mean', 'low_80','high_80', 'low_95','high_95'];
         $scope.meanChartData = [
-            [65, 59, 80, 81, 56, 55, 40],
-            [28, 48, 40, 19, 86, 27, 90]
+            [],
+            []
         ];
+        $scope.meanChartOptions = {
+
+            legend: {
+                display: true,
+                position: "bottom"
+            }
+        };
         $scope.onClick = function (points, evt) {
             console.log(points, evt);
         };
-        $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
-        $scope.options = {
-            scales: {
-                yAxes: [
-                    {
-                        id: 'y-axis-1',
-                        type: 'linear',
-                        display: true,
-                        position: 'left'
-                    },
-                    {
-                        id: 'y-axis-2',
-                        type: 'linear',
-                        display: true,
-                        position: 'right'
-                    }
-                ]
+
+
+
+
+
+        function fillSelectBox() {
+            $scope.previousMonths =[];
+            for(var i= 0; i < $scope.list.length; i++) {
+                // fill selectbox with unique values
+                if (!$scope.previousMonths.includes($scope.list[i].previous_month + " " + $scope.list[i].previous_year)) {
+                    $scope.previousMonths.push($scope.list[i].previous_month + " " + $scope.list[i].previous_year);
+                }
             }
+            $scope.previousMonth = $scope.previousMonths[0];
+        }
+
+        $scope.filterList = function(previousMonth) {
+            $scope.filteredList = angular.copy($scope.list);
+            for(var i = $scope.filteredList.length - 1; i >= 0; i--) {
+                if($scope.filteredList[i].previous_month + " " + $scope.filteredList[i].previous_year !== previousMonth) {
+                    $scope.filteredList.splice(i, 1);
+                }
+            }
+            setChartData();
         };
 
-
-
-        function fillChartData(value, list) {
-
+        function setChartData() {
+            console.log($scope.filteredList);
+            $scope.meanChartData = [[],[],[],[],[]];
+            $scope.meanChartLabels =[];
+            for(var i= 0; i < $scope.filteredList.length; i++){
+                $scope.meanChartData[0].push($scope.filteredList[i].mean);
+                $scope.meanChartData[1].push($scope.filteredList[i].low_80);
+                $scope.meanChartData[2].push($scope.filteredList[i].high_80);
+                $scope.meanChartData[3].push($scope.filteredList[i].low_95);
+                $scope.meanChartData[4].push($scope.filteredList[i].high_95);
+                $scope.meanChartLabels.push($scope.filteredList[i].predicted_months + " ")
+            }
+            console.log($scope.meanChartData)
         }
 
 
-
-        $http.get('api/all').then(function(response) {
-
-            $scope.list = response.data.data;
+        $http.get('test.json').then(function(response) {
+            $scope.list = response.data;
             $scope.meanChartData = [];
-
             $scope.previousMonths =[];
             $scope.meanChartLabels =[];
 
-            for(var i= 0; i < response.data.data.length; i++){
-
-
-                // fill selectbox with unique values
-                if(!$scope.previousMonths.includes(response.data.data[i].previous_month + " " + response.data.data[i].previous_year)){
-                    $scope.previousMonths.push(response.data.data[i].previous_month + " " + response.data.data[i].previous_year);
-                }
-
-                // select first value from list as selected
-                $scope.previousMonth = $scope.previousMonths[0];
-
-                // filter server response
-                if(response.data.data[i].previous_month + " " + response.data.data[i].previous_year === $scope.previousMonth){
-                    $scope.meanChartData.push(response.data.data[i].mean);
-                    $scope.meanChartLabels.push(response.data.data[i].predicted_months + " ")
-                }
-
-            }
-
-
-            console.log($scope.meanChartLabels)
-
+            fillSelectBox($scope.list);
+            $scope.filterList($scope.previousMonth);
         });
 
     }]);
