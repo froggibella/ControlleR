@@ -96,9 +96,10 @@ angular.module('ControlR',['ui.router', 'chart.js'])
         }
 
 
-        $http.get('api/all').then(function(response) {
-            console.log(response)
-            $scope.list = response.data.data;
+        $http.get('test.json').then(function(response) {
+            console.log(response);
+
+            $scope.list = response.data;
             $scope.meanChartData = [];
             $scope.previousMonths =[];
             $scope.meanChartLabels =[];
