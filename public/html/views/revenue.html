@@ -8,7 +8,6 @@
         <h4><label>Previous month: </label>
             <select ng-change="filterList(previousMonth)" ng-model="previousMonth">
                 <option ng-selected="item == previousMonth"
-                        ng-repeat="item in previousMonths"
                         ng-value="item">{{item}}</option>
                 <option ng-repeat="x in previousMonths" value="{{x}}">{{x}}</option>
             </select>
@@ -22,8 +21,9 @@
     <div class="col-lg-6">
         <h2>Chart</h2>
 
+
         <canvas id="line" class="chart chart-line" chart-data="meanChartData"
-                chart-labels="meanChartLabels" chart-series="series" chart-options="meanChartOptions" chart-click="onClick">
+                chart-labels="meanChartLabels" chart-series="series" chart-options="meanChartOptions" chart-click="onClick" chart-colors="chartColors">
         </canvas>
     </div>
     <div class="col-lg-6">

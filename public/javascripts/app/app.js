@@ -39,24 +39,20 @@ angular.module('ControlR',['ui.router', 'chart.js'])
             'username': "ladyHildo"
         };
 
-        $scope.series = ['mean', 'low_80','high_80', 'low_95','high_95'];
-        $scope.meanChartData = [
-            [],
-            []
-        ];
+        $scope.meanChartData = [];
+        $scope.chartColors = [
+            {borderColor:'#3109B2', fill:false/* this option hide background-color */},
+            {borderColor:'#00BF3A', fill:false},
+            {borderColor:'#00BF3A', fill:false},
+            {borderColor:'#FF2300', fill:false},
+            {borderColor:'#FF2300', fill:false}];
         $scope.meanChartOptions = {
-
-            legend: {
-                display: true,
-                position: "bottom"
-            }
+            elements: { point: { radius: 0 } }
         };
+
         $scope.onClick = function (points, evt) {
             console.log(points, evt);
         };
-
-
-
 
 
         function fillSelectBox() {
@@ -96,8 +92,9 @@ angular.module('ControlR',['ui.router', 'chart.js'])
         }
 
 
-        $http.get('test.json').then(function(response) {
-            $scope.list = response.data;
+        $http.get('api/all').then(function(response) {
+            console.log(response)
+            $scope.list = response.data.data;
             $scope.meanChartData = [];
             $scope.previousMonths =[];
             $scope.meanChartLabels =[];
@@ -105,6 +102,7 @@ angular.module('ControlR',['ui.router', 'chart.js'])
             fillSelectBox($scope.list);
             $scope.filterList($scope.previousMonth);
         });
+
 
     }]);
 

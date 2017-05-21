@@ -66,9 +66,28 @@ function getAllData(request, response, next) {
         });
 }
 
+
+function getOriginalData(request, response, next) {
+    db.any("select * from bea_temp.monthly_revenue")
+    // PROMISE - waits for server response
+        .then(function (data) {
+            response.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved all data'
+                });
+        })
+        //fehlerbehandlung
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 // make functions available in other js modules
 module.exports = {
-    getAllData: getAllData
+    getAllData: getAllData,
+    getOriginalData: getOriginalData
 };
 
 

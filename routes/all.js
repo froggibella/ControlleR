@@ -11,6 +11,7 @@ var db = require('../queries');
 //.get comes from Router- objekt in express modul
 router.get('/', function(req, res, next) {
     db.getAllData(req, res, next);
+    db.getOriginalData(req, res, next);
 });
 
 module.exports = router;
