@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            <span class="fa fa-usd"></span> Revenue
+            <span class="fa fa-line-chart"></span> Revenue
         </h1>
         <h4><label>Previous month: </label>
             <select ng-change="filterList(previousMonth)" ng-model="previousMonth">
@@ -19,44 +19,63 @@
 <div class="row">
 
     <div class="col-lg-6">
-        <h2>Chart</h2>
-
-
-        <canvas id="line" class="chart chart-line" chart-data="meanChartData"
-                chart-labels="meanChartLabels" chart-series="series" chart-options="meanChartOptions" chart-click="onClick" chart-colors="chartColors">
-        </canvas>
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-area-chart"></i> Chart</h3>
+            </div>
+            <div class="panel-body">
+                <canvas id="line" class="chart chart-line" chart-data="meanChartData"
+                        chart-labels="meanChartLabels" chart-series="series" chart-options="meanChartOptions" chart-click="onClick" chart-colors="chartColors">
+                </canvas>
+            </div>
+        </div>
     </div>
     <div class="col-lg-6">
-        <h2>Table</h2>
-        <div class="table-responsive">
-            <table ng-init="fractionSize = 2" class="table table-bordered table-hover table-striped">
-                <thead>
-                <tr>
-                    <th>predicted_months</th>
-                    <th>mean</th>
-                    <th>low_80</th>
-                    <th>high_80</th>
-                    <th>low_95</th>
-                    <th>high_95</th>
-                    <th>method</th>
-                    <th>create_date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="entry in filteredList">
-                    <td>{{entry.predicted_months}}</td>
-                    <td>{{entry.mean | number : fractionSize}}</td>
-                    <td>{{entry.low_80 | number : fractionSize}}</td>
-                    <td>{{entry.high_80 | number : fractionSize}}</td>
-                    <td>{{entry.low_95 | number : fractionSize}}</td>
-                    <td>{{entry.high_95 | number : fractionSize}}</td>
-                    <td>{{entry.method}}</td>
-                    <td>{{entry.create_date}}</td>
 
-                </tr>
-                </tbody>
-            </table>
+
+
+
+
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-list"></i> Data</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table ng-init="fractionSize = 2" class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Mean</th>
+                            <th>Low 80%</th>
+                            <th>High 80%</th>
+                            <th>Low 95%</th>
+                            <th>High 95%</th>
+                            <th>Method</th>
+                            <th>Created</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="entry in filteredList">
+                            <td>{{entry.predicted_months}}</td>
+                            <td>{{entry.mean}}</td>
+                            <td>{{entry.low_80}}</td>
+                            <td>{{entry.high_80}}</td>
+                            <td>{{entry.low_95}}</td>
+                            <td>{{entry.high_95}}</td>
+                            <td>{{entry.method}}</td>
+                            <td>{{entry.create_date}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
+
+
+
     </div>
 </div>
 <!-- /.row -->

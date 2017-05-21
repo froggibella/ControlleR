@@ -73,6 +73,11 @@ angular.module('ControlR',['ui.router', 'chart.js'])
                     $scope.filteredList.splice(i, 1);
                 }
             }
+            for(var i = $scope.filteredList.length - 1; i >= 0; i--) {
+                if($scope.filteredList[i].previous_month + " " + $scope.filteredList[i].previous_year !== previousMonth) {
+                    $scope.filteredList.splice(i, 1);
+                }
+            }
             setChartData();
         };
 
@@ -88,7 +93,6 @@ angular.module('ControlR',['ui.router', 'chart.js'])
                 $scope.meanChartData[4].push($scope.filteredList[i].high_95);
                 $scope.meanChartLabels.push($scope.filteredList[i].predicted_months + " ")
             }
-            console.log($scope.meanChartData)
         }
 
 
