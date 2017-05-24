@@ -121,7 +121,7 @@ angular.module('ControlR',['ui.router', 'chart.js'])
                 if(month.charAt(0) === "0"){
                     month = month.substr(1)
                 }
-                console.log(month +" " + year);
+                console.log(month + " " + year);
             }
 
 
