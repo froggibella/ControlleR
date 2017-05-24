@@ -49,7 +49,7 @@ fs.readFile('pgConnection', 'utf8', function (err,data) {
 });
 
 
-function getAllData(request, response, next) {
+function getPredictedRevenues(request, response, next) {
     db.any("select * from bea_temp.test")
         // PROMISE - waits for server response
         .then(function (data) {
@@ -67,7 +67,7 @@ function getAllData(request, response, next) {
 }
 
 
-function getOriginalData(request, response, next) {
+function getRevenues(request, response, next) {
     db.any("select * from bea_temp.monthly_revenue")
     // PROMISE - waits for server response
         .then(function (data) {
@@ -86,8 +86,8 @@ function getOriginalData(request, response, next) {
 
 // make functions available in other js modules
 module.exports = {
-    getAllData: getAllData,
-    getOriginalData: getOriginalData
+    getPredictedRevenues: getPredictedRevenues,
+    getRevenues: getRevenues
 };
 
 

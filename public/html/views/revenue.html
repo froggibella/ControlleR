@@ -58,11 +58,11 @@
                         <tbody>
                         <tr ng-repeat="entry in filteredList">
                             <td>{{entry.predicted_months}}</td>
-                            <td>{{entry.mean}}</td>
-                            <td>{{entry.low_80}}</td>
-                            <td>{{entry.high_80}}</td>
-                            <td>{{entry.low_95}}</td>
-                            <td>{{entry.high_95}}</td>
+                            <td>{{entry.mean | currency}}</td>
+                            <td>{{entry.low_80 | currency}}</td>
+                            <td>{{entry.high_80 | currency}}</td>
+                            <td>{{entry.low_95 | currency}}</td>
+                            <td>{{entry.high_95 | currency}}</td>
                             <td>{{entry.method}}</td>
                             <td>{{entry.create_date}}</td>
 

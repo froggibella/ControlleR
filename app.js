@@ -9,7 +9,8 @@ var R = require("r-script"); // r-script executor
 
 var index = require('./routes/index'); // route to get angular application
 var api = require('./routes/api'); // rest api (swagger)
-var all = require('./routes/all');
+var revenues = require('./routes/revenues');
+var predictedRevenues = require('./routes/predictedRevenues');
 
 /*TEST USING r-script
 var R = require("r-script"); // r-script executor
@@ -35,7 +36,9 @@ app.use(express.static(path.join(__dirname, 'public'))); //public ordner wird on
 
 app.use('/', index);
 app.use('/api', api);
-app.use('/api/all', all);
+app.use('/api/revenues', revenues);
+app.use('/api/predictedRevenues', predictedRevenues);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

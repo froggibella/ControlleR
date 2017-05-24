@@ -57,55 +57,75 @@ angular.module('ControlR',['ui.router', 'chart.js'])
 
         function fillSelectBox() {
             $scope.previousMonths =[];
-            for(var i= 0; i < $scope.list.length; i++) {
+            for(var i= 0; i < $scope.predictedRevenues.length; i++) {
                 // fill selectbox with unique values
-                if (!$scope.previousMonths.includes($scope.list[i].previous_month + " " + $scope.list[i].previous_year)) {
-                    $scope.previousMonths.push($scope.list[i].previous_month + " " + $scope.list[i].previous_year);
+                if (!$scope.previousMonths.includes($scope.predictedRevenues[i].previous_month + " " + $scope.predictedRevenues[i].previous_year)) {
+                    $scope.previousMonths.push($scope.predictedRevenues[i].previous_month + " " + $scope.predictedRevenues[i].previous_year);
                 }
             }
             $scope.previousMonth = $scope.previousMonths[0];
         }
 
         $scope.filterList = function(previousMonth) {
-            $scope.filteredList = angular.copy($scope.list);
-            for(var i = $scope.filteredList.length - 1; i >= 0; i--) {
-                if($scope.filteredList[i].previous_month + " " + $scope.filteredList[i].previous_year !== previousMonth) {
-                    $scope.filteredList.splice(i, 1);
+            $scope.filteredPredictedRevenues = angular.copy($scope.predictedRevenues);
+            for(var i = $scope.filteredPredictedRevenues.length - 1; i >= 0; i--) {
+                if($scope.filteredPredictedRevenues[i].previous_month + " " + $scope.filteredPredictedRevenues[i].previous_year !== previousMonth) {
+                    $scope.filteredPredictedRevenues.splice(i, 1);
                 }
             }
-            for(var i = $scope.filteredList.length - 1; i >= 0; i--) {
-                if($scope.filteredList[i].previous_month + " " + $scope.filteredList[i].previous_year !== previousMonth) {
-                    $scope.filteredList.splice(i, 1);
+            for(var i = $scope.filteredPredictedRevenues.length - 1; i >= 0; i--) {
+                if($scope.filteredPredictedRevenues[i].previous_month + " " + $scope.filteredPredictedRevenues[i].previous_year !== previousMonth) {
+                    $scope.filteredPredictedRevenues.splice(i, 1);
                 }
             }
             setChartData();
         };
 
         function setChartData() {
-            console.log($scope.filteredList);
+            console.log($scope.filteredPredictedRevenues);
             $scope.meanChartData = [[],[],[],[],[]];
             $scope.meanChartLabels =[];
-            for(var i= 0; i < $scope.filteredList.length; i++){
-                $scope.meanChartData[0].push($scope.filteredList[i].mean);
-                $scope.meanChartData[1].push($scope.filteredList[i].low_80);
-                $scope.meanChartData[2].push($scope.filteredList[i].high_80);
-                $scope.meanChartData[3].push($scope.filteredList[i].low_95);
-                $scope.meanChartData[4].push($scope.filteredList[i].high_95);
-                $scope.meanChartLabels.push($scope.filteredList[i].predicted_months + " ")
+            for(var i= 0; i < $scope.filteredPredictedRevenues.length; i++){
+                $scope.meanChartData[0].push($scope.filteredPredictedRevenues[i].mean);
+                $scope.meanChartData[1].push($scope.filteredPredictedRevenues[i].low_80);
+                $scope.meanChartData[2].push($scope.filteredPredictedRevenues[i].high_80);
+                $scope.meanChartData[3].push($scope.filteredPredictedRevenues[i].low_95);
+                $scope.meanChartData[4].push($scope.filteredPredictedRevenues[i].high_95);
+                $scope.meanChartLabels.push($scope.filteredPredictedRevenues[i].predicted_months + " ")
             }
         }
 
 
-        $http.get('test.json').then(function(response) {
+        $http.get('api/predictedRevenues').then(function(response) {
             console.log(response);
-
-            $scope.list = response.data;
+            $scope.predictedRevenues = response.data.data;
             $scope.meanChartData = [];
             $scope.previousMonths =[];
             $scope.meanChartLabels =[];
 
-            fillSelectBox($scope.list);
+            fillSelectBox($scope.predictedRevenues);
             $scope.filterList($scope.previousMonth);
+        });
+
+
+
+        $http.get('api/revenues').then(function(response) {
+            console.log(response.data.data);
+            console.log($scope.previousMonth);
+            $scope.revenues = response.data.data;
+
+            for(var i= 0; i < $scope.revenues.length; i++){
+                var date = $scope.revenues[i].yyyy_mm.split('-');
+                var year= date[0];
+                var month = date[1];
+                if(month.charAt(0) === "0"){
+                    month = month.substr(1)
+                }
+                console.log(month +" " + year);
+            }
+
+
+            //$scope.meanChartData[4].push($scope.filteredPredictedRevenues[i].high_95);
         });
 
 
