@@ -5,13 +5,21 @@
         <h1 class="page-header">
             <span class="fa fa-line-chart"></span> Revenue <small>Statistics Overview</small>
         </h1>
-        <h4><label>Previous month: </label>
-            <select ng-change="filterList(previousMonth)" ng-model="previousMonth">
-                <option ng-selected="item == previousMonth"
+        <label>Previous month: </label>
+            <select ng-change="aggregateDataSet(selectedMonth)" ng-model="selectedMonth">
+                <option ng-selected="item == selectedMonth"
                         ng-value="item">{{item}}</option>
-                <option ng-repeat="x in previousMonths" value="{{x}}">{{x}}</option>
+                <option ng-repeat="x in selectedMonths" value="{{x}}">{{x}}</option>
             </select>
-        </h4>
+
+
+            {{slider_go_past.value}}
+            <input type="number" ng-model="go_past" >
+
+        <div ng-controller="MainController as vm">
+        <p><b>Last updated:</b> {{lastSliderUpdated}}</p>
+        <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
+
     </div>
 </div>
 <!-- /.row -->
@@ -46,6 +54,7 @@
                         <thead>
                         <tr>
                             <th>Month</th>
+                            <th>Revenue</th>
                             <th>Mean</th>
                             <th>Low 80%</th>
                             <th>High 80%</th>
@@ -56,8 +65,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="entry in filteredList">
+                        <tr ng-repeat="entry in filteredPredictedRevenues">
+                            <!--<td ng-repeat="column in entry">{{column}}</td> -->
                             <td>{{entry.predicted_months}}</td>
+                            <td>{{entry.netRevenue | currency}}</td>
                             <td>{{entry.mean | currency}}</td>
                             <td>{{entry.low_80 | currency}}</td>
                             <td>{{entry.high_80 | currency}}</td>
@@ -65,7 +76,6 @@
                             <td>{{entry.high_95 | currency}}</td>
                             <td>{{entry.method}}</td>
                             <td>{{entry.create_date}}</td>
-
                         </tr>
                         </tbody>
                     </table>

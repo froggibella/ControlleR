@@ -13,27 +13,11 @@ var obj = {
     }
 };
 
-obj.func1("Muschi Ochse");
-
-console.log(typeof obj);
-
-
-obj.inte = 1;
-
-
-obj.func2();
-var arr = [
-    "str1",
-    1,
-    [1,2,3]
-];
-console.log(arr[2][1]);
-var str = "str";
-
-
 var options = {
     promiseLib: bluebird
 };
+
+//pgp= Pretty Good Privacy-Verschlüsselung
 var pgp = require('pg-promise')(options);
 
 // db connection
@@ -50,7 +34,7 @@ fs.readFile('pgConnection', 'utf8', function (err,data) {
 
 
 function getPredictedRevenues(request, response, next) {
-    db.any("select * from bea_temp.test")
+    db.any("select * from ap_financial_forecast.forecast_monthly_revenue")
         // PROMISE - waits for server response
         .then(function (data) {
             response.status(200)
@@ -59,6 +43,7 @@ function getPredictedRevenues(request, response, next) {
                     data: data,
                     message: 'Retrieved all data'
                 });
+
         })
         //fehlerbehandlung
         .catch(function (err) {
@@ -68,7 +53,7 @@ function getPredictedRevenues(request, response, next) {
 
 
 function getRevenues(request, response, next) {
-    db.any("select * from bea_temp.monthly_revenue")
+    db.any("SELECT yyyy_mm, iso_month_in_year, iso_year, net_revenue FROM ap_financial_forecast.t_monthly_data")
     // PROMISE - waits for server response
         .then(function (data) {
             response.status(200)
