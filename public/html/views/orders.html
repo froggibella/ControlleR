@@ -3,19 +3,19 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            <span class="fa fa-line-chart"></span> Revenue <small>Statistics Overview</small>
+            <span class="fa fa-line-chart"></span> Orders <small>Statistics Overview</small>
         </h1>
         <label>Previous month: </label>
-            <select ng-change="aggregateDataSet(selectedMonth)" ng-model="selectedMonth">
-                <option ng-selected="item == selectedMonth"
-                        ng-value="item">{{item}}</option>
-                <option ng-repeat="x in selectedMonths" value="{{x}}">{{x}}</option>
-            </select>
+        <select ng-change="aggregateDataSetOrders(selectedMonthsOrder)" ng-model="selectedMonthsOrder">
+            <option ng-selected="item == selectedMonthsOrder"
+                    ng-value="item">{{item}}</option>
+            <option ng-repeat="x in selectedMonthsOrders" value="{{x}}">{{x}}</option>
+        </select>
 
 
-            {{go_past}}
-            <input type="number" ng-model="go_past" ng-change="aggregateDataSet(selectedMonth, go_past, go_future)">
-        <input type="number" ng-model="go_future" ng-change="aggregateDataSet(selectedMonth, go_past, go_future)">
+        {{go_past}}
+        <input type="number" ng-model="go_past" ng-change="aggregateDataSetOrders(selectedMonthsOrder, go_past, go_future)">
+        <input type="number" ng-model="go_future" ng-change="aggregateDataSetOrders(selectedMonthsOrder, go_past, go_future)">
 
     </div>
 </div>
@@ -29,8 +29,8 @@
                 <h3 class="panel-title"><i class="fa fa-area-chart"></i> Chart</h3>
             </div>
             <div class="panel-body">
-                <canvas id="line" class="chart chart-line" chart-data="meanChartData"
-                        chart-labels="meanChartLabels" chart-series="series" chart-options="meanChartOptions" chart-click="onClick" chart-colors="chartColors">
+                <canvas id="line" class="chart chart-line" chart-data="meanChartDataOrders"
+                        chart-labels="meanChartLabelsOrders" chart-series="series" chart-options="meanChartOptions" chart-click="onClick" chart-colors="chartColors">
                 </canvas>
             </div>
         </div>
@@ -51,7 +51,7 @@
                         <thead>
                         <tr>
                             <th>Month</th>
-                            <th>Revenue</th>
+                            <th>Orders</th>
                             <th>Mean</th>
                             <th>Low 80%</th>
                             <th>High 80%</th>
@@ -62,15 +62,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="entry in filteredPredictedRevenues">
+                        <tr ng-repeat="entry in filteredPredictedOrders">
                             <!--<td ng-repeat="column in entry">{{column}}</td> -->
                             <td>{{entry.predicted_months}}</td>
-                            <td>{{entry.netRevenue | currency}}</td>
-                            <td>{{entry.mean | currency}}</td>
-                            <td>{{entry.low_80 | currency}}</td>
-                            <td>{{entry.high_80 | currency}}</td>
-                            <td>{{entry.low_95 | currency}}</td>
-                            <td>{{entry.high_95 | currency}}</td>
+                            <td>{{entry.number_of_orders | number}}</td>
+                            <td>{{entry.mean | number}}</td>
+                            <td>{{entry.low_80 | number}}</td>
+                            <td>{{entry.high_80 | number}}</td>
+                            <td>{{entry.low_95 | number}}</td>
+                            <td>{{entry.high_95 | number}}</td>
                             <td>{{entry.method}}</td>
                             <td>{{entry.create_date}}</td>
                         </tr>

@@ -20,7 +20,6 @@
     <link href="fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Slider CSS -->
-    <link rel="stylesheet" href="javascripts/third_party/slider/rzslider.css">
 
 </head>
 
@@ -114,6 +113,9 @@
                 <li class="">
                     <a ui-sref="revenue"><i class="fa fa-fw fa-line-chart"></i> Revenue</a>
                 </li>
+                <li class="">
+                    <a ui-sref="orders"><i class="fa fa-fw fa-line-chart"></i> Orders</a>
+                </li>
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="demo" class="collapse">
@@ -148,8 +150,18 @@
 <script src='javascripts/third_party/Chart.bundle.min.js'></script>
 <!--https://cdnjs.com/libraries/Chart.js/2.5.0-->
 <script src='javascripts/third_party/angular-chart.min.js'></script>
+
+<script>
+    $(".nav li").on("click", function() {
+        $(".nav li").removeClass("active");
+        $(this).addClass("active");
+    });
+
+</script>
+
+
 <script src='javascripts/app/app.js'></script>
-<script src='javascripts/third_party/slider/rzslider.js'></script>
+
 
 
 </body>

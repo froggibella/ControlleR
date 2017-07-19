@@ -2,7 +2,7 @@
 // define angular module/app "ControlR". This module depends on the ui.router module
 // the script of this module is mentioned in the index.js
 
-angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
+angular.module('ControlR',['ui.router', 'chart.js'])
 
     // config block for the previous defined "ControlR" module
     .config(function($stateProvider) {
@@ -20,8 +20,14 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
             templateUrl: 'html/views/dashboard.html'
         };
 
+        var orderState = {
+            name: 'orders',
+            url: '/orders',
+            templateUrl: 'html/views/orders.html'
+        };
         // activate the previous defined states for the ui.router
         $stateProvider.state(revenueState);
+        $stateProvider.state(orderState);
         $stateProvider.state(dashboardState);
     })
 
@@ -51,9 +57,10 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
             elements: { point: { radius: 0 } }
         };
 
+        $scope.meanChartDataOrders = [];
+
         function fillSelectBox() {
             $scope.selectedMonths =[];
-
             for(var i= 0; i < allPredictedRevenues.length; i++) {
                 // fill selectbox with unique values
                 if (!$scope.selectedMonths.includes(allPredictedRevenues[i].previous_month + " " + allPredictedRevenues[i].previous_year)) {
@@ -64,11 +71,31 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
             $scope.selectedMonth = $scope.selectedMonths[0];
         }
 
-        $scope.aggregateDataSet = function(selectedMonth) {
+        function fillSelectBoxOrders() {
+            $scope.selectedMonthsOrders =[];
+            for(var i= 0; i < allPredictedOrders.length; i++) {
+                // fill selectbox with unique values
+                if (!$scope.selectedMonthsOrders.includes(allPredictedOrders[i].previous_month + " " + allPredictedOrders[i].previous_year)) {
+                    $scope.selectedMonthsOrders.push(allPredictedOrders[i].previous_month + " " + allPredictedOrders[i].previous_year);
+                }
+            }
+            // get first entry from list as first selected value
+            $scope.selectedMonthsOrder = $scope.selectedMonthsOrders[0];
+        }
+
+        $scope.aggregateDataSet = function(selectedMonth, go_past, go_future) {
             // angular copy needed for call by value instead of call by reference
+            if(go_past ==  undefined){
+                go_past =  5
+
+            };
+            if(go_future ==  undefined){
+                go_future =  8
+            };
+            console.log(allPredictedOrders)
+
             $scope.filteredPredictedRevenues = angular.copy(allPredictedRevenues);
             $scope.filteredRevenues = angular.copy(allRevenues);
-
 
             var createdDate  = new Date(selectedMonth.split(" ")[1], selectedMonth.split(" ")[0]);
             var selectedRevenue = 0
@@ -96,7 +123,6 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
                     $scope.filteredPredictedRevenues[i].netRevenue = undefined
                 }
                 else {
-                    console.log($scope.filteredRevenues[i].net_revenue);
                     $scope.filteredPredictedRevenues[i].netRevenue = $scope.filteredRevenues[i].net_revenue;
                 }
             }
@@ -105,45 +131,9 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
             $scope.meanChartLabels =[];
               var l= 0;
               var k = 0;
-            $scope.go_past =  10 ;
-            $scope.go_future = 6 ;
-
-            var vm = this;
-            vm.lastSliderUpdated = '';
-
-            vm.myChangeListener = function(sliderId) {
-                //console.log(sliderId, 'has changed with ', vm.slider.value);
-                vm.lastSliderUpdated = vm.slider.value;
-                $scope.go_past = vm.slider.value;
-            };
-
-            vm.slider = {
-                value: 36,
-                options: {
-                    floor: 0,
-                    ceil: 36,
-                    id: 'sliderA',
-                    onChange: vm.myChangeListener
-                }
-            };
-
-            /*
-            $scope.slider = {
-                value: 100,
-                options: {
-                    id: 'slider-id',
-                    onChange: function(id) {
-                        console.log('on change ' + id); // logs 'on change slider-id'
-                    }
-                }
-            };
-            */
-
-
-              var j =  selectedRevenue - $scope.go_past +1;
-
-            for(i=0; i < ($scope.go_past + $scope.go_future) ; i++){
-                if($scope.go_past == 0 ) {
+              var j =  selectedRevenue - go_past +1;
+            for(i=0; i < (go_past + go_future) ; i++){
+                if(go_past == 0 ) {
                     k = 2;
                 }
                 if(allRevenues[j] !== undefined){
@@ -186,8 +176,103 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
             };
         };
 
+
+        $scope.aggregateDataSetOrders = function(selectedMonthsOrder, go_past, go_future) {
+            // angular copy needed for call by value instead of call by reference
+            if(go_past ==  undefined){
+                go_past =  5
+            };
+            if(go_future ==  undefined){
+                go_future =  5
+            };
+
+            $scope.filteredPredictedOrders = angular.copy(allPredictedOrders);
+            $scope.filteredOrders = angular.copy(allOrders);
+
+            var createdDate  = new Date(selectedMonthsOrder.split(" ")[1], selectedMonthsOrder.split(" ")[0]);
+            var selectedOrder = 0
+            // filter for relevant orders
+            for(var i = $scope.filteredOrders.length - 1; i >= 0; i--) {
+                var tempDate =  new Date($scope.filteredOrders[i].iso_year, $scope.filteredOrders[i].iso_month_in_year)
+                if(tempDate.getTime() <= createdDate.getTime()) {
+                    //delete from array:
+                    $scope.filteredOrders.splice(i, 1);
+                }
+                if (createdDate.getTime() === tempDate.getTime()){
+                    selectedOrder = i;
+                }
+            }
+            // filter for relevant prediction
+            for(var i = $scope.filteredPredictedOrders.length - 1; i >= 0; i--) {
+                if($scope.filteredPredictedOrders[i].previous_month + " " + $scope.filteredPredictedOrders[i].previous_year !== selectedMonthsOrder) {
+                    //delete from array:
+                    $scope.filteredPredictedOrders.splice(i, 1);
+                }
+            }
+            // adding orders to prediction if exists
+            for(var i = 0;i < $scope.filteredPredictedOrders.length; i++) {
+                if ($scope.filteredOrders[i] === undefined) {
+                    $scope.filteredPredictedOrders[i].number_of_orders = undefined
+                }
+                else {
+                    $scope.filteredPredictedOrders[i].number_of_orders = $scope.filteredOrders[i].number_of_orders;
+                }
+            }
+
+            $scope.meanChartDataOrders = [[],[],[],[],[],[]];
+            $scope.meanChartLabelsOrders =[];
+            var l= 0;
+            var k = 0;
+            var j =  selectedOrder - go_past +1;
+            for(i=0; i < (go_past + go_future) ; i++){
+                if(go_past == 0 ) {
+                    k = 2;
+                }
+                if(allOrders[j] !== undefined){
+                    $scope.meanChartDataOrders[0].push(allOrders[j].number_of_orders);
+                    if($scope.filteredPredictedOrders[0].previous_year == allOrders[j].iso_year
+                        & $scope.filteredPredictedOrders[0].previous_month == allOrders[j].iso_month_in_year) {
+                        k= 1;
+                    }
+                }
+                else   {
+                    $scope.meanChartDataOrders[0].push(undefined);
+
+                }
+                if(k== 2){
+                    if($scope.filteredPredictedOrders[l] !== undefined) {
+                        $scope.meanChartDataOrders[1].push($scope.filteredPredictedOrders[l].mean);
+                        $scope.meanChartDataOrders[2].push($scope.filteredPredictedOrders[l].low_80);
+                        $scope.meanChartDataOrders[3].push($scope.filteredPredictedOrders[l].high_80);
+                        $scope.meanChartDataOrders[4].push($scope.filteredPredictedOrders[l].low_95);
+                        $scope.meanChartDataOrders[5].push($scope.filteredPredictedOrders[l].high_95);
+                        $scope.meanChartLabelsOrders.push($scope.filteredPredictedOrders[l].predicted_months + " ")
+                    }
+                    else{
+                        $scope.meanChartDataOrders[1].push(undefined);
+                        $scope.meanChartDataOrders[2].push(undefined);
+                        $scope.meanChartDataOrders[3].push(undefined);
+                        $scope.meanChartDataOrders[4].push(undefined);
+                        $scope.meanChartDataOrders[5].push(undefined);
+                    }
+                    l++;
+                }
+                else {$scope.meanChartDataOrders[1].push(undefined);
+                    $scope.meanChartDataOrders[2].push(undefined);
+                    $scope.meanChartDataOrders[3].push(undefined);
+                    $scope.meanChartDataOrders[4].push(undefined);
+                    $scope.meanChartDataOrders[5].push(undefined);
+                    if(allOrders[j] !== undefined){$scope.meanChartLabelsOrders.push(allOrders[j].yyyy_mm + " ")};
+                    if (k == 1) {k=2} }
+                j++;
+            };
+        };
+
+
         var allRevenues;
         var allPredictedRevenues;
+        var allPredictedOrders;
+        var allOrders;
 
         function getDataFromServer() {
             var dataPromises = [];
@@ -196,10 +281,20 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
             dataPromises.push($http.get('api/predictedRevenues').then(function(response) {
                 allPredictedRevenues = response.data.data;
             }));
-
-            dataPromises.push(// ajax call -> gets data from node server via http (REST)
+            // ajax call -> gets data from node server via http (REST)
+            dataPromises.push(
                 $http.get('api/revenues').then(function(response) {
                     allRevenues = response.data.data;
+                })
+            );
+
+            dataPromises.push($http.get('api/predictedOrders').then(function(response) {
+                allPredictedOrders = response.data.data;
+            }));
+            // ajax call -> gets data from node server via http (REST)
+            dataPromises.push(
+                $http.get('api/orders').then(function(response) {
+                    allOrders = response.data.data;
                 })
             );
 
@@ -209,6 +304,7 @@ angular.module('ControlR',['ui.router', 'chart.js', 'rzModule'])
 
         getDataFromServer().then(function () {
             fillSelectBox();
+            fillSelectBoxOrders();
             $scope.aggregateDataSet($scope.selectedMonth);
         })
 

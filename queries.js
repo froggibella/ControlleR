@@ -69,10 +69,50 @@ function getRevenues(request, response, next) {
         });
 }
 
+
+
+function getPredictedOrders(request, response, next) {
+    db.any("select * from ap_financial_forecast.forecast_monthly_orders")
+    // PROMISE - waits for server response
+        .then(function (data) {
+            response.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved all data'
+                });
+
+        })
+        //fehlerbehandlung
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
+
+function getOrders(request, response, next) {
+    db.any("SELECT yyyy_mm, iso_month_in_year, iso_year, number_of_orders FROM ap_financial_forecast.t_monthly_data")
+    // PROMISE - waits for server response
+        .then(function (data) {
+            response.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved all data'
+                });
+        })
+        //fehlerbehandlung
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 // make functions available in other js modules
 module.exports = {
     getPredictedRevenues: getPredictedRevenues,
-    getRevenues: getRevenues
+    getRevenues: getRevenues,
+    getOrders: getOrders,
+    getPredictedOrders: getPredictedOrders
 };
 
 

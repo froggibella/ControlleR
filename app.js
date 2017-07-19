@@ -11,7 +11,8 @@ var index = require('./routes/index'); // route to get angular application
 var api = require('./routes/api'); // rest api (swagger)
 var revenues = require('./routes/revenues');
 var predictedRevenues = require('./routes/predictedRevenues');
-
+var orders = require('./routes/orders');
+var predictedOrders = require('./routes/predictedOrders');
 /*TEST USING r-script
 var R = require("r-script"); // r-script executor
 var out = R("bin/ex-sync.R")
@@ -38,7 +39,8 @@ app.use('/', index);
 app.use('/api', api);
 app.use('/api/revenues', revenues);
 app.use('/api/predictedRevenues', predictedRevenues);
-
+app.use('/api/orders', orders);
+app.use('/api/predictedOrders', predictedOrders);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
