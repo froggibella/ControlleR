@@ -111,10 +111,10 @@
                     <a ui-sref="dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                 </li>
                 <li class="">
-                    <a ui-sref="revenue"><i class="fa fa-fw fa-line-chart"></i> Revenue</a>
+                    <a ui-sref="revenue"><i class="fa fa-fw fa-eur"></i> Revenue</a>
                 </li>
                 <li class="">
-                    <a ui-sref="orders"><i class="fa fa-fw fa-line-chart"></i> Orders</a>
+                    <a ui-sref="orders"><i class="fa fa-fw fa-shopping-cart"></i> Orders</a>
                 </li>
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
@@ -142,28 +142,34 @@
 </div>
 <!-- /#wrapper -->
 
-<script src="javascripts/third_party/jquery.js"></script>
-<script src="javascripts/third_party/bootstrap.js"></script>
-<script src='javascripts/third_party/angular.min.js'></script>
-<script src="javascripts/third_party/angular-locale_de-de.js"></script>
-<script src='javascripts/third_party/angular-ui-router.min.js'></script>
-<script src='javascripts/third_party/Chart.bundle.min.js'></script>
+<script src="third_party/jquery.js"></script>
+<script src="third_party/bootstrap.js"></script>
+<script src='third_party/angular.min.js'></script>
+<script src="third_party/angular-locale_de-de.js"></script>
+<script src='third_party/angular-ui-router.min.js'></script>
+<script src='third_party/Chart.bundle.min.js'></script>
 <!--https://cdnjs.com/libraries/Chart.js/2.5.0-->
-<script src='javascripts/third_party/angular-chart.min.js'></script>
+<script src='third_party/angular-chart.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.6.5/angular-touch.js'></script>
+<script src='third_party/angular-slider.js'></script>
+
+
+<script src='app/core/app.js'></script>
+<script src='app/core/app-controller.js'></script>
+
+<script src='app/dashboard/dashboard-controller.js'></script>
+<script src='app/orders/orders-controller.js'></script>
+<script src='app/revenue/revenue-controller.js'></script>
 
 <script>
     $(".nav li").on("click", function() {
         $(".nav li").removeClass("active");
         $(this).addClass("active");
     });
-
 </script>
-
-
-<script src='javascripts/app/app.js'></script>
-
 
 
 </body>
 
 </html>
+

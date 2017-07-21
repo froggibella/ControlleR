@@ -72,7 +72,9 @@ function getRevenues(request, response, next) {
 
 
 function getPredictedOrders(request, response, next) {
-    db.any("select * from ap_financial_forecast.forecast_monthly_orders")
+
+
+    db.any("select previous_month, previous_year, date, predicted_months, mean, low_80, high_80, low_95, high_95,method, create_date from ap_financial_forecast.forecast_monthly_orders ORDER BY 2,1")
     // PROMISE - waits for server response
         .then(function (data) {
             response.status(200)
@@ -81,7 +83,6 @@ function getPredictedOrders(request, response, next) {
                     data: data,
                     message: 'Retrieved all data'
                 });
-
         })
         //fehlerbehandlung
         .catch(function (err) {
