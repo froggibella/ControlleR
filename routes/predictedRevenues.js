@@ -13,4 +13,14 @@ router.get('/', function(req, res, next) {
     db.getPredictedRevenues(req, res, next);
 });
 
+// get only the latest prediction for last month from order list
+router.get('/latest', function(req, res, next) {
+    db.getLatestPredictedRevenues(req, res, next);
+});
+
+// get only the current prediction for this month from order list
+router.get('/current', function(req, res, next) {
+    db.getCurrentPredictedRevenues(req, res, next);
+});
+
 module.exports = router;

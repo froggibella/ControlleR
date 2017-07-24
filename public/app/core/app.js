@@ -13,19 +13,23 @@ angular.module('ControlR',[
     var revenueState = {
         name: 'revenue',
         url: '/revenue',
-        templateUrl: 'app/revenue/revenue.html'
+        templateUrl: 'app/revenue/revenue.html',
+        controller: 'RevenueController'
     };
 
     var dashboardState = {
         name: 'dashboard',
         url: '/',
-        templateUrl: 'app/dashboard/dashboard.html'
+        templateUrl: 'app/dashboard/dashboard.html',
+        controller: 'DashboardController'
     };
 
     var orderState = {
         name: 'orders',
         url: '/orders',
-        templateUrl: 'app/orders/orders.html'
+        templateUrl: 'app/orders/orders.html',
+        controller: 'OrdersController'
+
     };
 
     // activate the previous defined states for the ui.router

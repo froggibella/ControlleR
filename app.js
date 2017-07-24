@@ -5,7 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser'); // reads body of http requests like PUT/POST/DELETE
 
+var CronJob = require('cron').CronJob;
 var R = require("r-script"); // r-script executor
+var nodemailer = require('nodemailer');
+
 
 var index = require('./routes/index'); // route to get angular application
 var api = require('./routes/api'); // rest api (swagger)
@@ -13,13 +16,59 @@ var revenues = require('./routes/revenues');
 var predictedRevenues = require('./routes/predictedRevenues');
 var orders = require('./routes/orders');
 var predictedOrders = require('./routes/predictedOrders');
-/*TEST USING r-script
-var R = require("r-script"); // r-script executor
-var out = R("bin/ex-sync.R")
-    .data("hello world", 10)
-    .callSync();
-console.log(out);
+
+var fs = require('fs');
+
+var os = require('os');
+
+var transporter;
+fs.readFile('Connections', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  data.split(os.EOL);
+
+  // make db connection available as variable
+  var eMailCredentials = {
+    user: data.split(os.EOL)[1],
+    pw: data.split(os.EOL)[2]
+  };
+  transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: eMailCredentials.user,
+      pass: eMailCredentials.pw
+    }
+  });
+});
+
+
+// Execution on the 5th of the month
+new CronJob('* * * 5 * *', function() {
+/*
+  var out = R("bin/ex-sync.R")
+      .data("hello world", 10)
+      .callSync();
+  console.log(out);
 */
+
+  var mailOptions = {
+    from: 'controllr@tausendkind.de',
+    to: 'beatrice.hildebrandt@gmail.com',
+    subject: 'Prediction Alert',
+    text: 'fett, oder fett?'
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  //set this to true to activate mail function
+}, null, true, 'America/Los_Angeles');
+
 
 var app = express(); //generiert ein expressmodul als Variable app
 

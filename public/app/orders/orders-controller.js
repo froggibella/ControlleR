@@ -2,15 +2,44 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
 
 
     $scope.chartColors = [
-        {borderColor:'black', fill:false/* this option hide background-color */},
-        {borderColor:'#3109B2', fill:false/* this option hide background-color */},
-        {borderColor:'#00BF3A', fill:false},
-        {borderColor:'#00BF3A', fill:false},
-        {borderColor:'#FF2300', fill:false},
-        {borderColor:'#FF2300', fill:false}];
+        {borderColor:'black', fill:false, pointBackgroundColor: 'black'/* this option hide background-color */},
+        {borderColor:'#3109B2', fill:false, pointBackgroundColor: '#3109B2'},
+        {borderColor:'#00BF3A', fill:false, pointBackgroundColor: '#00BF3A'},
+        {borderColor:'#00BF3A', fill:false, pointBackgroundColor: '#00BF3A'},
+        {borderColor:'#FF2300', fill:false, pointBackgroundColor: '#FF2300'},
+        {borderColor:'#FF2300', fill:false, pointBackgroundColor: '#FF2300'}];
     $scope.chartOptions = {
-        elements: { point: { radius: 0 } }
+        elements: {
+            point: { radius: 2 }
+        },
+        legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+                usePointStyle: true
+            }
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label +': ' +Math.round(tooltipItem.yLabel * 100) / 100 + " €"
+                }
+            }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    userCallback: function (value, index, values) {
+                        value = value.toString();
+                        value = value.split(/(?=(?:...)*$)/);
+                        value = value.join('.');
+                        return value + " €";
+                    }
+                }
+            }]
+        }
     };
+    $scope.chartSeries = ['Revenue', 'Prediction', 'LO 80%', 'HI 80%', 'LO 95%', 'HI 95%'];
 
     $scope.chartData = [];
 
@@ -26,7 +55,7 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
         $scope.selectedMonth = $scope.selectedMonths[0];
     }
 
-    $scope.showPreviousMonts = 1;
+    $scope.showPreviousMonths = 1;
     $scope.showNextMonths = 3;
 
     $scope.aggregateDataSet = function(selectedMonth, go_past, go_future) {
@@ -64,7 +93,7 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
         }
 
         $scope.chartData = [[],[],[],[],[],[]];
-        $scope.meanChartLabelsOrders =[];
+        $scope.chartLabels =[];
         var l= 0;
         var k = 0;
         var j =  selectedOrder - go_past +1;
@@ -90,7 +119,7 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
                     $scope.chartData[3].push($scope.filteredPredictedOrders[l].high_80);
                     $scope.chartData[4].push($scope.filteredPredictedOrders[l].low_95);
                     $scope.chartData[5].push($scope.filteredPredictedOrders[l].high_95);
-                    $scope.meanChartLabelsOrders.push($scope.filteredPredictedOrders[l].predicted_months + " ")
+                    $scope.chartLabels.push($scope.filteredPredictedOrders[l].predicted_months + " ")
                 }
                 else{
                     $scope.chartData[1].push(undefined);
@@ -106,7 +135,7 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
                 $scope.chartData[3].push(undefined);
                 $scope.chartData[4].push(undefined);
                 $scope.chartData[5].push(undefined);
-                if(allOrders[j] !== undefined){$scope.meanChartLabelsOrders.push(allOrders[j].yyyy_mm + " ")};
+                if(allOrders[j] !== undefined){$scope.chartLabels.push(allOrders[j].yyyy_mm + " ")};
                 if (k == 1) {k=2} }
             j++;
         }
@@ -133,6 +162,6 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
 
     getDataFromServer().then(function () {
         fillSelectBox();
-        $scope.aggregateDataSet($scope.selectedMonth, $scope.showPreviousMonts, $scope.showNextMonths);
+        $scope.aggregateDataSet($scope.selectedMonth, $scope.showPreviousMonths, $scope.showNextMonths);
     })
 }]);
