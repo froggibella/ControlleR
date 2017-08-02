@@ -20,6 +20,9 @@ var predictedOrders = require('./routes/predictedOrders');
 var fs = require('fs');
 
 var os = require('os');
+var queryToCheck = require('./queries');
+
+
 
 var transporter;
 fs.readFile('Connections', 'utf8', function (err,data) {
@@ -42,32 +45,54 @@ fs.readFile('Connections', 'utf8', function (err,data) {
   });
 });
 
-
 // Execution on the 5th of the month
 new CronJob('* * * 5 * *', function() {
-/*
+  // load r script for new predictions
   var out = R("bin/ex-sync.R")
       .data("hello world", 10)
       .callSync();
   console.log(out);
-*/
 
-  var mailOptions = {
-    from: 'controllr@tausendkind.de',
-    to: 'beatrice.hildebrandt@gmail.com',
-    subject: 'Prediction Alert',
-    text: 'fett, oder fett?'
-  };
-
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
+  var result = queryToCheck.getRevenues();
+  result.then(function (data) {
+    //TODO: check data and send mail if necessary
+    if(true){
+      sendMail(data);
     }
   });
+
+
+  function sendMail(data){
+    var table = "";
+    for(var i = 0; i < data.length; i++){
+      table += '<table><tr><td>' + data[i].yyyy_mm + ' - </td><td>' + data[i].net_revenue + ' €</td></tr></table>'
+    }
+
+    var mailOptions = {
+      to: 'beatrice.hildebrandt@gmail.com',
+      subject: 'Prediction Alert',
+      html: '<html>' +
+              '<body>' +
+                '<h1>Check your ControllR application!</h1><br>' +
+
+                '<h4>Here are the Revenues - check it out</h4>' +
+                table +
+              '</body>' +
+            '</html>'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  }
+
+
   //set this to true to activate mail function
-}, null, true, 'America/Los_Angeles');
+}, null, true, 'Europe/Berlin');
 
 
 var app = express(); //generiert ein expressmodul als Variable app
