@@ -2,7 +2,7 @@
     <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">
+            <h1>
                 <span class="fa fa-shopping-cart"></span> Orders <small>Statistics Overview</small>
             </h1>
         </div>
@@ -10,15 +10,8 @@
 
     <div class="row">
         <div class="col-xs-3">
-            <label>Show months before: </label>
-            <slider
-                    ng-model="showPreviousMonths"
-                    ng-change="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)"
-
-                    floor="1"
-                    ceiling="24"
-                    step-width="1">
-            </slider>
+                <label>Show months before: </label>
+                <input pagination-slider min="1" max="24" step="1" model="showPreviousMonths" callback-fn="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)"/>
         </div>
         <div class="col-xs-3">
             <label>Pediction month: </label></br>
@@ -30,13 +23,7 @@
         </div>
         <div class="col-xs-3">
             <label>Show months after: </label>
-            <slider
-                    ng-model="showNextMonths"
-                    ng-change="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)"
-                    floor="1"
-                    ceiling="24"
-                    step-width="1">
-            </slider>
+            <input pagination-slider min="1" max="24" step="1" model="showNextMonths" callback-fn="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)"/>
         </div>
     </div>
     <!-- /.row -->

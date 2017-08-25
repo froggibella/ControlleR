@@ -4,8 +4,7 @@
 
 angular.module('ControlR',[
     'ui.router',
-    'chart.js',
-    'vr.directives.slider'
+    'chart.js'
 ])
 // config block for the previous defined "ControlR" module
 .config(function($stateProvider) {

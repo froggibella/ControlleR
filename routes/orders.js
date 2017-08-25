@@ -5,10 +5,10 @@ var router = require('express').Router();
 var db = require('../queries');
 
 /* GET users listing. */
-//router  enthält express modul
+//router contents express module
 //req: client request
 //res: server response
-//.get comes from Router- object in express modul
+//.get comes from router-object in express module
 
 // get whole order list
 router.get('/', function(req, res, next) {

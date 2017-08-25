@@ -53,11 +53,13 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
         // get first entry from list as first selected value
         $scope.selectedMonth = $scope.selectedMonths[0];
     }
-
-    $scope.showPreviousMonts = 1;
+    $scope.showPreviousMonths = 1;
     $scope.showNextMonths = 5;
 
     $scope.aggregateDataSet = function(selectedMonth, go_past, go_future) {
+
+
+        console.log($scope.showPreviousMonths);
         // angular copy needed for call by value instead of call by reference
         $scope.filteredPredictedRevenues = angular.copy(allPredictedRevenues);
         $scope.filteredRevenues = angular.copy(allRevenues);
@@ -66,7 +68,7 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
         var selectedRevenue = 0;
         // filter for relevant revenue
         for(var i = $scope.filteredRevenues.length - 1; i >= 0; i--) {
-            var tempDate =  new Date($scope.filteredRevenues[i].iso_year, $scope.filteredRevenues[i].iso_month_in_year)
+            var tempDate =  new Date($scope.filteredRevenues[i].iso_year, $scope.filteredRevenues[i].iso_month_in_year);
             if(tempDate.getTime() <= createdDate.getTime()) {
                 //delete from array:
                 $scope.filteredRevenues.splice(i, 1);
@@ -96,9 +98,9 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
         $scope.chartLabels =[];
         var l= 0;
         var k = 0;
-        var j =  selectedRevenue - go_past +1;
-        for(i=0; i < (go_past + go_future) ; i++){
-            if(go_past == 0 ) {
+        var j =  selectedRevenue -  $scope.showPreviousMonths +1;
+        for(i=0; i < ( $scope.showPreviousMonths + $scope.showNextMonths) ; i++){
+            if( $scope.showPreviousMonths == 0 ) {
                 k = 2;
             }
             if(allRevenues[j] !== undefined){
@@ -163,6 +165,6 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
 
     getDataFromServer().then(function () {
         fillSelectBox();
-        $scope.aggregateDataSet($scope.selectedMonth, $scope.showPreviousMonts, $scope.showNextMonths);
+        $scope.aggregateDataSet($scope.selectedMonth, $scope.showPreviousMonths, $scope.showNextMonths);
     })
 }]);

@@ -1,15 +1,17 @@
+//external moduls
 var express = require('express'); // router module
 var path = require('path'); // serves static files
 var favicon = require('serve-favicon'); // serves favicon
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser'); // reads body of http requests like PUT/POST/DELETE
-
+var fs = require('fs');
+var os = require('os');
 var CronJob = require('cron').CronJob;
 var R = require("r-script"); // r-script executor
 var nodemailer = require('nodemailer');
 
-
+//self implemented routes
 var index = require('./routes/index'); // route to get angular application
 var api = require('./routes/api'); // rest api (swagger)
 var revenues = require('./routes/revenues');
@@ -17,9 +19,7 @@ var predictedRevenues = require('./routes/predictedRevenues');
 var orders = require('./routes/orders');
 var predictedOrders = require('./routes/predictedOrders');
 
-var fs = require('fs');
 
-var os = require('os');
 var queryToCheck = require('./queries');
 
 
@@ -36,6 +36,7 @@ fs.readFile('Connections', 'utf8', function (err,data) {
     user: data.split(os.EOL)[1],
     pw: data.split(os.EOL)[2]
   };
+  // create transporter object
   transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -54,8 +55,9 @@ new CronJob('* * * 5 * *', function() {
   console.log(out);
 
   var result = queryToCheck.getRevenues();
+  var currentPredRevenue = queryToCheck.getCurrentPredictedRevenues();
   result.then(function (data) {
-    //TODO: check data and send mail if necessary
+    //TODO: check aggregated data and send mail if necessary
     if(true){
       sendMail(data);
     }
@@ -67,7 +69,8 @@ new CronJob('* * * 5 * *', function() {
     for(var i = 0; i < data.length; i++){
       table += '<table><tr><td>' + data[i].yyyy_mm + ' - </td><td>' + data[i].net_revenue + ' €</td></tr></table>'
     }
-
+    var currentRevenue = '<h1> Revenue for this month:'+ data[data.length-1].yyyy_mm + ' ' + data[data.length-1].net_revenue + '</h1>';
+    // setup email data with unicode symbols
     var mailOptions = {
       to: 'beatrice.hildebrandt@gmail.com',
       subject: 'Prediction Alert',
@@ -77,10 +80,11 @@ new CronJob('* * * 5 * *', function() {
 
                 '<h4>Here are the Revenues - check it out</h4>' +
                 table +
+                currentRevenue +
               '</body>' +
             '</html>'
     };
-
+    // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);

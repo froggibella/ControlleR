@@ -22,8 +22,6 @@ fs.readFile('Connections', 'utf8', function (err,data) {
     db = pgp(data.split(os.EOL)[0]);
 });
 
-
-
 function getRevenues() {
     return db.any("SELECT yyyy_mm, iso_month_in_year, iso_year, net_revenue FROM ap_financial_forecast.t_monthly_data")
 }
