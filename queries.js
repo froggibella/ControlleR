@@ -13,14 +13,10 @@ var pgp = require('pg-promise')(options);
 // db connection
 var fs = require('fs');
 var db;
+
 // read login credentials
-fs.readFile('Connections', 'utf8', function (err,data) {
-    if (err) {
-        return console.log(err);
-    }
-    // make db connection available as variable
-    db = pgp(data.split(os.EOL)[0]);
-});
+var fileData =  fs.readFileSync('Connections', 'utf8');
+db = pgp(fileData.split(os.EOL)[0]);
 
 function getRevenues() {
     return db.any("SELECT yyyy_mm, iso_month_in_year, iso_year, net_revenue FROM ap_financial_forecast.t_monthly_data")

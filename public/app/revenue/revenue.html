@@ -11,26 +11,25 @@
 
     <div class="row">
         <div class="col-xs-3">
-            <label>Show months bevore: </label>
-
-            {{showPreviousMonths}}
-
-            <input pagination-slider min="1" max="24" step="1" model="showPreviousMonths" callback-fn="aggregateDataSet(selectedMonth)"/>
+            <label>Show months before: {{showPreviousMonths}}</label>
+            <input pagination-slider min="1" max="24" step="1" model="showPreviousMonths" callback-fn="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)"/>
         </div>
+
         <div class="col-xs-3">
+
             <label>Pediction month: </label></br>
-            <select ng-change="aggregateDataSet(selectedMonth, showPreviousMonts, showNextMonts)" ng-model="selectedMonth">
+            <select ng-change="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)" ng-model="selectedMonth">
                 <option ng-selected="item == selectedMonth"
                         ng-value="item">{{item}}</option>
                 <option ng-repeat="x in selectedMonths" value="{{x}}">{{x}}</option>
             </select>
         </div>
         <div class="col-xs-3">
-            <label>Show months after: </label>
-            {{showNextMonths}}
-            <input pagination-slider min="1" max="24" step="1" model="showNextMonths" callback-fn="aggregateDataSet(selectedMonth)"/>
+            <label>Show months after: {{showNextMonths}}</label>
+            <input pagination-slider min="1" max="24" step="1" model="showNextMonths" callback-fn="aggregateDataSet(selectedMonth, showPreviousMonths, showNextMonths)"/>
         </div>
     </div>
+    <br>
     <!-- /.row -->
 
     <div class="row">

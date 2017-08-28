@@ -22,7 +22,7 @@
 
    <!-- /.row -->
 <div class="row">
-<div class="col-lg-6">
+<div class="col-md-6">
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title"><i class="fa fa-eur"></i>   Revenue before Returns</h3>
@@ -35,37 +35,37 @@
                             <div class="container-fluid">
                                 <p>Information for {{currentRevenues.yyyy_mm}}</p>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Current Revenue:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{currentRevenues.current_revenue | currency}}</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
-                                        <p><small>( Reachable Revenue:</small></p>
+                                    <div class="col-sm-8" >
+                                        <p><small>Reachable Revenue:</small></p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
-                                        <p><small>{{currentRevenues.current_reachable_revenue | currency}} )</small></p>
+                                    <div class="col-sm-4" align="right">
+                                        <p>{{currentRevenues.current_reachable_revenue | currency}}</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Prediction from {{currentPredictedRevenues.yyyy_mm}}:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{currentPredictedRevenues.mean | currency}}</p>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Current Difference:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
-                                        <p>{{currentRevenues.current_revenue - currentPredictedRevenues.mean | currency}}</p>
-                                        <p>{{(currentRevenues.current_revenue - currentPredictedRevenues.mean) / currentRevenues.current_revenue *100 | number :2 }} %</p>
+                                    <div class="col-sm-4" align="right">
+                                        <p>{{currentRevenues.current_reachable_revenue - currentPredictedRevenues.mean | currency}}</p>
+                                        <p>{{(currentRevenues.current_reachable_revenue - currentPredictedRevenues.mean) / currentRevenues.current_reachable_revenue *100 | number :2 }} %</p>
                                     </div>
                                 </div>
                             </div>
@@ -78,27 +78,27 @@
                             <div class="container-fluid">
                                 <p>Information for {{latestRevenues.yyyy_mm}}</p>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Revenue:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{latestRevenues.net_revenue | currency}}</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Prediction from {{latestPredictedRevenues.yyyy_mm}}:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{latestPredictedRevenues.mean | currency}}</p>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Difference:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{latestRevenues.net_revenue - latestPredictedRevenues.mean | currency}}</p>
                                         <p>{{(latestRevenues.net_revenue - latestPredictedRevenues.mean) / latestRevenues.net_revenue *100 | number :2 }} %</p>
                                     </div>
@@ -112,7 +112,7 @@
     </div>
 </div>
 
-<div class="col-lg-6">
+<div class="col-md-6">
     <div class="panel panel-success">
         <div class="panel-heading">
             <h3 class="panel-title"><i class="fa fa-shopping-cart"></i>   Number of Orders before Returns</h3>
@@ -125,37 +125,37 @@
                             <div class="container-fluid">
                                 <p>Information for {{currentOrders.yyyy_mm}}</p>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Current Orders:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{currentOrders.number_of_orders | number}}</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
-                                        <p><small>( Reachable Orders:</small></p>
+                                    <div class="col-sm-8" >
+                                        <p><small>Reachable Orders:</small></p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
-                                        <p><small>{{currentOrders.current_reachable_orders | number}} )</small></p>
+                                    <div class="col-sm-4" align="right">
+                                        <p>{{currentOrders.current_reachable_orders | number}}</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Prediction from {{currentPredictedRevenues.yyyy_mm}}:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
-                                        <p>{{currentPredictedOrders.mean | currency}}</p>
+                                    <div class="col-sm-4" align="right">
+                                        <p>{{currentPredictedOrders.mean | number}}</p>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Current Difference:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
-                                        <p>{{currentOrders.number_of_orders - currentPredictedOrders.mean | currency}}</p>
-                                        <p>{{(currentOrders.number_of_orders - currentPredictedOrders.mean) / currentOrders.number_of_orders *100 | number :2 }} %</p>
+                                    <div class="col-sm-4" align="right">
+                                        <p>{{currentOrders.current_reachable_orders - currentPredictedOrders.mean | number}}</p>
+                                        <p>{{(currentOrders.current_reachable_orders - currentPredictedOrders.mean) / currentOrders.current_reachable_orders *100 | number :2 }} %</p>
                                     </div>
                                 </div>
                             </div>
@@ -168,27 +168,27 @@
                             <div class="container-fluid">
                                 <p>Information for {{latestOrders.yyyy_mm}}</p>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Orders:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{latestOrders.number_of_orders | number}}</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Prediction from {{latestPredictedOrders.yyyy_mm}}:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{latestPredictedOrders.mean | number}}</p>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-sm-3 col-md-6" >
+                                    <div class="col-sm-8" >
                                         <p>Difference:</p>
                                     </div>
-                                    <div class="col-sm-9 col-md-6" align="right">
+                                    <div class="col-sm-4" align="right">
                                         <p>{{latestOrders.number_of_orders - latestPredictedOrders.mean | number}}</p>
                                         <p>{{(latestOrders.number_of_orders - latestPredictedOrders.mean) / latestOrders.number_of_orders *100 | number :2 }} %</p>
                                     </div>

@@ -55,8 +55,8 @@ angular.module('ControlR').controller('OrdersController', ['$scope','$state', '$
         $scope.selectedMonth = $scope.selectedMonths[0];
     }
 
-    $scope.showPreviousMonths = 1;
-    $scope.showNextMonths = 3;
+    $scope.showPreviousMonths = 6;
+    $scope.showNextMonths = 6;
 
     $scope.aggregateDataSet = function(selectedMonth, go_past, go_future) {
 

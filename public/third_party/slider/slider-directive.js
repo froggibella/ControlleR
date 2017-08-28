@@ -9,10 +9,7 @@
             restrict: 'A',
             scope: {
                 setURL: '&callbackFn',
-                model: '=',
-                sort: '=',
-                oder: '=',
-                oderBy: '='
+                model: '='
             },
             link: link
         };
@@ -20,7 +17,6 @@
         return directive;
 
         function link(scope, ele, attrs) {
-
             ele.slider({
                 min: +attrs.min,
                 max: +attrs.max,
@@ -33,10 +29,6 @@
                     return ele.slider('getValue');
                 }
             };
-
-            scope.$watch('max', function() {
-                ele.slider('setValue', +scope.model);
-            });
 
             ele.on("slideStop", function(slideEvt) {
                 scope.model = slideEvt.value;

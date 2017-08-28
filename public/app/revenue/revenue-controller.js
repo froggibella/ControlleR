@@ -53,13 +53,13 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
         // get first entry from list as first selected value
         $scope.selectedMonth = $scope.selectedMonths[0];
     }
-    $scope.showPreviousMonths = 1;
-    $scope.showNextMonths = 5;
+    $scope.showPreviousMonths = 6;
+    $scope.showNextMonths = 6;
 
     $scope.aggregateDataSet = function(selectedMonth, go_past, go_future) {
 
-
         console.log($scope.showPreviousMonths);
+
         // angular copy needed for call by value instead of call by reference
         $scope.filteredPredictedRevenues = angular.copy(allPredictedRevenues);
         $scope.filteredRevenues = angular.copy(allRevenues);
@@ -96,25 +96,30 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
 
         $scope.chartData = [[],[],[],[],[],[]];
         $scope.chartLabels =[];
-        var l= 0;
-        var k = 0;
-        var j =  selectedRevenue -  $scope.showPreviousMonths +1;
-        for(i=0; i < ( $scope.showPreviousMonths + $scope.showNextMonths) ; i++){
+
+        var l = 0;
+        var k;
+        // determinite start index of the collection array
+        var collectionStartIndex =  selectedRevenue -  $scope.showPreviousMonths + 1;
+        //build chart data for the whole selected period
+        for(i = 0; i < ( $scope.showPreviousMonths + $scope.showNextMonths) ; i++){
+            //if no previous month shell be shown, then it simply adds predicted values from that time on to chart
             if( $scope.showPreviousMonths == 0 ) {
                 k = 2;
             }
-            if(allRevenues[j] !== undefined){
-                $scope.chartData[0].push(allRevenues[j].net_revenue);
-                if($scope.filteredPredictedRevenues[0].previous_year == allRevenues[j].iso_year
-                    & $scope.filteredPredictedRevenues[0].previous_month == allRevenues[j].iso_month_in_year) {
-                    k= 1;
+            // if there is previous revenue, it is pushed to chart
+            if(allRevenues[collectionStartIndex] !== undefined){
+                $scope.chartData[0].push(allRevenues[collectionStartIndex].net_revenue);
+                //if previous month of prediction matches current month for revenue, then in next loop also predicted revenue will pushed to chart
+                if($scope.filteredPredictedRevenues[0].previous_year == allRevenues[collectionStartIndex].iso_year
+                    & $scope.filteredPredictedRevenues[0].previous_month == allRevenues[collectionStartIndex].iso_month_in_year) {
+                    k = 1;
                 }
             }
             else   {
                 $scope.chartData[0].push(undefined);
-
             }
-            if(k== 2){
+            if(k == 2){
                 if($scope.filteredPredictedRevenues[l] !== undefined) {
                     $scope.chartData[1].push($scope.filteredPredictedRevenues[l].mean);
                     $scope.chartData[2].push($scope.filteredPredictedRevenues[l].low_80);
@@ -124,6 +129,7 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
                     $scope.chartLabels.push($scope.filteredPredictedRevenues[l].predicted_months + " ")
                 }
                 else{
+
                     $scope.chartData[1].push(undefined);
                     $scope.chartData[2].push(undefined);
                     $scope.chartData[3].push(undefined);
@@ -137,10 +143,11 @@ angular.module('ControlR').controller('RevenueController', ['$scope','$state', '
                 $scope.chartData[3].push(undefined);
                 $scope.chartData[4].push(undefined);
                 $scope.chartData[5].push(undefined);
-                if(allRevenues[j] !== undefined){$scope.chartLabels.push(allRevenues[j].yyyy_mm + " ")};
-                if (k == 1) {k=2} }
-            j++;
+                if(allRevenues[collectionStartIndex] !== undefined){$scope.chartLabels.push(allRevenues[collectionStartIndex].yyyy_mm + " ")}
+                if (k == 1) {k = 2} }
+            collectionStartIndex++;
         }
+
     };
 
     var allRevenues;
